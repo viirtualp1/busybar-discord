@@ -1,6 +1,6 @@
 {
   "name": "busybar-discord",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Your Discord voice channel on a BUSY Bar: everyone's avatar in a row, and a ring that lights on whoever is talking",
   "license": "MIT",
   "author": "viirtualp1",
@@ -38,6 +38,7 @@
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc -p tsconfig.build.json && busybar-emit-spec",
+    "prepack": "npm run build",
     "typecheck": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -53,7 +54,7 @@
   },
   "dependencies": {
     "@busy-app/busy-lib": "^0.18.0",
-    "busybar-kit": "^2.1.0"
+    "busybar-kit": "^2.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

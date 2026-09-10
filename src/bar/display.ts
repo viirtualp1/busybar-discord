@@ -45,7 +45,16 @@ export class BarDisplay {
   private stopped = false;
   private queued: Frame | null = null;
   private lastKey = '';
-  private lastIds: string[] = [];
+  /**
+   * The ids that are on the device, or null for "no idea".
+   *
+   * The difference matters. An empty list means the screen is known to be
+   * empty; null means this process has not drawn yet and something from a
+   * previous run — a previous *version* — may still be up there. Elements
+   * persist by id, so anything we no longer mention would stay for as long as
+   * the Bar does.
+   */
+  private lastIds: string[] | null = null;
   private lastDrawAt = 0;
 
   constructor(
@@ -65,7 +74,7 @@ export class BarDisplay {
   /** Forgets what is on screen, so the next frame is drawn in full. */
   markStale(): void {
     this.lastKey = '';
-    this.lastIds = [];
+    this.lastIds = null;
   }
 
   stop(): void {
@@ -146,13 +155,14 @@ export class BarDisplay {
     // Elements persist on the device by id, so one this frame does not mention
     // stays on screen: everything is drawn every time, which covers changes but
     // not disappearances. Somebody leaving the call is a disappearance, and a
-    // clear is the only way to be rid of them.
+    // clear is the only way to be rid of them — as is the first draw of a run,
+    // where whatever the last run left behind is still up and unaccounted for.
     //
-    // Only a disappearance, though. Ids arriving — which is what happens as the
-    // avatars come in, one upload at a time — need no clear at all, and clearing
-    // for them means wiping and redrawing the whole screen once per avatar,
-    // right when the device is busiest.
-    if (this.lastIds.some((id) => !ids.includes(id))) {
+    // Those two cases only. Ids arriving — which is what happens as the avatars
+    // come in, one upload at a time — need no clear at all, and clearing for
+    // them means wiping and redrawing the whole screen once per avatar, right
+    // when the device is busiest.
+    if (this.lastIds === null || this.lastIds.some((id) => !ids.includes(id))) {
       await this.bar.DisplayClear({ application_name: APP_NAME });
     }
     this.lastIds = ids;

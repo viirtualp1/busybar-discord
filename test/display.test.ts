@@ -100,7 +100,11 @@ test('an avatar arriving does not wipe the screen', async () => {
   await display.push(bare);
   await display.push(withOne);
 
-  assert.equal(calls.filter((call) => call === 'clear').length, 0, calls.join(','));
+  assert.equal(
+    calls.filter((call) => call === 'clear').length,
+    1,
+    'the opening wipe only — not one per avatar: ' + calls.join(','),
+  );
   assert.equal(calls.filter((call) => call === 'draw').length, 2);
 });
 
@@ -110,7 +114,8 @@ test('somebody leaving does wipe it, or they would stay on screen', async () => 
   await display.push(frame(['1', '2']));
   await display.push(frame(['1']));
 
-  assert.equal(calls.filter((call) => call === 'clear').length, 1);
+  // One for the opening wipe, one for the person who left.
+  assert.equal(calls.filter((call) => call === 'clear').length, 2);
 });
 
 test('a burst of changes becomes one draw, not one draw each', async () => {
@@ -214,4 +219,30 @@ test('a reconnect puts the pictures back without re-fetching them', async () => 
 
   assert.equal(uploads.length, 2, 'sent again after the device went away');
   assert.equal(fetches, 1, 'but read off the disk rather than fetched a second time');
+});
+
+test('the first draw of a run wipes what the last one left behind', async () => {
+  // Elements persist on the device by id, and a previous run — or a previous
+  // version of the app, drawing ids this one no longer knows about — leaves
+  // them there. Nothing in the frame can say so, because the frame only knows
+  // what it wants drawn.
+  const { display, calls } = displayFor();
+
+  await display.push(frame(['1']));
+
+  assert.equal(calls[0], 'clear', calls.join(','));
+  assert.equal(calls[1], 'draw');
+});
+
+test('a reconnect wipes again, having lost track while the Bar was away', async () => {
+  const { display, calls } = displayFor();
+
+  await display.push(frame(['1']));
+  await display.push(frame(['1', '2']));
+  assert.equal(calls.filter((call) => call === 'clear').length, 1, 'only the first');
+
+  display.markStale();
+  await display.push(frame(['1', '2', '3']));
+
+  assert.equal(calls.filter((call) => call === 'clear').length, 2);
 });
