@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.png
+!docs/*.png
+.DS_Store
+
+# The OAuth token this app trades for, and the avatars it caches.
+discord-token.json
+avatars/
+preview/

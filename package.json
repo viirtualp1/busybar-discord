@@ -1,0 +1,72 @@
+{
+  "name": "busybar-discord",
+  "version": "1.0.0",
+  "description": "Your Discord voice channel on a BUSY Bar: everyone's avatar in a row, and a ring that lights on whoever is talking",
+  "license": "MIT",
+  "author": "viirtualp1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viirtualp1/busybar-discord.git"
+  },
+  "bugs": {
+    "url": "https://github.com/viirtualp1/busybar-discord/issues"
+  },
+  "homepage": "https://github.com/viirtualp1/busybar-discord#readme",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "busybar-discord": "dist/index.js",
+    "busybar-discord-login": "dist/login.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "keywords": [
+    "busy-bar",
+    "busybar",
+    "discord",
+    "discord-rpc",
+    "voice",
+    "led"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.build.json && busybar-emit-spec",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "check": "npm run lint && npm run typecheck && npm test",
+    "dev": "tsx src/index.ts",
+    "shot": "tsx src/preview.ts",
+    "login": "tsx src/login.ts",
+    "start": "npm run build && node dist/index.js",
+    "prepublishOnly": "npm run check && npm run build"
+  },
+  "dependencies": {
+    "@busy-app/busy-lib": "^0.18.0",
+    "busybar-kit": "^2.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.13.3",
+    "eslint": "^10.8.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.67.0"
+  },
+  "busybar": {
+    "config": "./dist/config-spec.js",
+    "configJson": "./dist/config-spec.json"
+  }
+}
