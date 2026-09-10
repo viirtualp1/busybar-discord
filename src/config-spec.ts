@@ -114,34 +114,5 @@ export default defineConfigSpec({
         },
       ],
     },
-    {
-      kind: 'env',
-      file: '.env',
-      title: 'The Bar',
-      reloads: 'restart',
-      fields: [
-        {
-          key: 'BUSY_ADDR',
-          label: 'Address',
-          type: 'text',
-          placeholder: 'http://192.168.0.186',
-          hint: 'Or the window manager, at http://127.0.0.1:4111',
-        },
-        {
-          key: 'BUSY_HTTP_PASSWORD',
-          label: 'HTTP Access password',
-          type: 'secret',
-          hint: "From the Bar's own settings. Not needed behind the window manager",
-        },
-        {
-          key: 'DRAW_PRIORITY',
-          label: 'Draw priority',
-          type: 'number',
-          fallback: '40',
-          hint: 'Higher wins the screen when two apps draw at once',
-          rules: [integerIn(0, 100)],
-        },
-      ],
-    },
   ],
 });
