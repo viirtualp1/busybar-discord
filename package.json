@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@busy-app/busy-lib": "^0.18.0",
-    "busybar-kit": "^2.2.0"
+    "busybar-kit": "^2.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
