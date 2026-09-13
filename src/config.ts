@@ -4,10 +4,6 @@ import { DEFAULT_MAX_TILES, HARD_MAX_TILES } from './view/frame.js';
 
 export { loadEnvFile };
 
-/** Which of the Bar's buttons toggles the microphone. */
-export const MUTE_BUTTONS = ['start', 'ok', 'back', 'none'] as const;
-export type MuteButton = (typeof MUTE_BUTTONS)[number];
-
 export type Config = BarConfig & {
   clientId: string;
   clientSecret: string;
@@ -18,7 +14,6 @@ export type Config = BarConfig & {
   cacheDir: string;
   maxTiles: number;
   hideBots: boolean;
-  muteButton: MuteButton;
   input: boolean;
   frameMs: number;
   /** Brightness lift on the avatars; 1 leaves them as they came. */
@@ -88,7 +83,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): LoadedConfig {
       cacheDir: read('AVATAR_CACHE_DIR') || DEFAULTS.cacheDir,
       maxTiles: number('MAX_AVATARS', DEFAULTS.maxTiles, LIMITS.maxTiles),
       hideBots: flag(read('HIDE_BOTS'), true),
-      muteButton: muteButton(read('MUTE_BUTTON'), warnings),
       input: flag(read('BAR_INPUT'), true),
       frameMs: number('FRAME_MS', DEFAULTS.frameMs, LIMITS.frameMs),
       avatarGain: number('AVATAR_GAIN', DEFAULTS.avatarGain, LIMITS.avatarGain, false),
@@ -109,27 +103,6 @@ function scopes(value: string): string[] {
     .filter(Boolean);
 
   return listed.length > 0 ? listed : DEFAULT_SCOPES;
-}
-
-/**
- * START is the default because the window manager does not use it: it takes OK
- * to cycle apps and BACK to hand the choice back, and leaves the third button
- * alone. Anything else here will be heard by the window manager too.
- */
-function muteButton(value: string, warnings: string[]): MuteButton {
-  const wanted = value.toLowerCase().trim();
-  if (!wanted) {
-    return 'start';
-  }
-  if ((MUTE_BUTTONS as readonly string[]).includes(wanted)) {
-    return wanted as MuteButton;
-  }
-
-  warnings.push(
-    `MUTE_BUTTON=${value} is not one of ${MUTE_BUTTONS.join(', ')}, using start`,
-  );
-
-  return 'start';
 }
 
 function flag(value: string, fallback: boolean): boolean {

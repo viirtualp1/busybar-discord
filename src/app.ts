@@ -13,6 +13,13 @@ export type Logger = Pick<Console, 'info' | 'warn' | 'error'>;
 /** How long to wait between asking an absent Bar whether it is back. */
 const BAR_RETRY_MS = 3000;
 
+/**
+ * The button that toggles your microphone. Not a setting: the window manager
+ * takes OK to cycle apps and BACK to hand the choice back, so START is the only
+ * one left, and offering the other two only offered a way to break those.
+ */
+export const MUTE_BUTTON = 'start';
+
 export type AppDeps = {
   config: Config;
   display: BarDisplay;
@@ -84,13 +91,10 @@ export class App {
    * queued, since holding the button should not queue up four toggles.
    */
   handleInput(event: InputEvent): void {
-    if (this.config.muteButton === 'none') {
-      return;
-    }
     if (event.kind !== 'button' || event.action !== 'press') {
       return;
     }
-    if (event.button !== this.config.muteButton || this.muting) {
+    if (event.button !== MUTE_BUTTON || this.muting) {
       return;
     }
 

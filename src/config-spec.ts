@@ -87,30 +87,11 @@ export default defineConfigSpec({
       reloads: 'restart',
       fields: [
         {
-          key: 'MUTE_BUTTON',
-          label: 'Mute the microphone with',
-          type: 'select',
-          fallback: 'start',
-          options: [
-            {
-              value: 'start',
-              label: 'START',
-              hint: 'busybar-wm leaves this one alone — but busybar-nowplaying uses it too',
-            },
-            { value: 'ok', label: 'OK', hint: 'busybar-wm cycles apps with this' },
-            { value: 'back', label: 'BACK', hint: 'busybar-wm unpins with this' },
-            {
-              value: 'none',
-              label: 'off',
-              hint: 'the Bar does not touch your microphone',
-            },
-          ],
-        },
-        {
           key: 'BAR_INPUT',
           label: "Listen to the Bar's controls",
           type: 'boolean',
           fallback: '1',
+          hint: 'START mutes and unmutes your microphone',
         },
       ],
     },

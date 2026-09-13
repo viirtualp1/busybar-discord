@@ -51,7 +51,7 @@ const discord = new DiscordClient({
 
 const app = new App({ config, display, discord, avatars });
 
-if (config.input && config.muteButton !== 'none') {
+if (config.input) {
   const credential = config.busyToken || config.busyHttpPassword;
   app.attachInput(
     new BarInput({
@@ -61,7 +61,7 @@ if (config.input && config.muteButton !== 'none') {
       onWarning: (warning) => console.warn(`[discord] ${warning}`),
     }),
   );
-  console.log(`[discord] ${config.muteButton.toUpperCase()} toggles your microphone`);
+  console.log('[discord] START toggles your microphone');
 }
 
 let exiting = false;

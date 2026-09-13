@@ -113,16 +113,15 @@ a device that honours an alpha channel in an uploaded asset.
 
 ## The button
 
-**START** toggles your microphone. It is the default because `busybar-wm` does
-not use it — the window manager takes **OK** to cycle apps and **BACK** to hand
-the choice back, and leaves the third button alone.
+**START** toggles your microphone, and that is not a setting. `busybar-wm` takes
+**OK** to cycle apps and **BACK** to hand the choice back, so START is the only
+button left over — binding either of the others only breaks the window manager.
 
 > [!WARNING]
 > **`busybar-nowplaying` also binds START**, to play/pause. Every app behind
 > the proxy sees every button, so if you run both, one press does both things.
-> Set `MUTE_BUTTON` here or unbind it there.
 
-`MUTE_BUTTON=none` leaves your microphone alone entirely.
+`BAR_INPUT=0` leaves your microphone alone entirely.
 
 ## What it asks of the Bar
 
@@ -184,7 +183,6 @@ Everything is in [.env.example](.env.example). The ones worth knowing:
 | `DISCORD_CLIENT_ID`     | The application you made. Required.                     |
 | `DISCORD_CLIENT_SECRET` | Beside it on the same page. Required.                   |
 | `MAX_AVATARS`           | How many faces at once. Default 5.                      |
-| `MUTE_BUTTON`           | `start`, `ok`, `back` or `none`.                        |
 | `HIDE_BOTS`             | A music bot is in the channel, not in the conversation. |
 | `AVATAR_GAIN`           | Photographs are dark at twelve pixels. Default 1.15.    |
 
