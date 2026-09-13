@@ -196,8 +196,8 @@ test('everything lands on the front strip', () => {
   assert.ok(frontElements(frame).every((element) => element.display === 'front'));
 });
 
-test('the away frame says so, rather than drawing nothing', () => {
+test('the away frame draws nothing, so it lays no claim to the screen', () => {
   const away = toFrame(null, null, silent, options);
 
-  assert.equal(frontElements(away).length, 1);
+  assert.equal(frontElements(away).length, 0);
 });

@@ -234,6 +234,27 @@ test('the first draw of a run wipes what the last one left behind', async () => 
   assert.equal(calls[1], 'draw');
 });
 
+test('out of a call the screen is handed back, not painted', async () => {
+  // Under the window manager any draw is a claim on the screen, so a "no call"
+  // card would keep music hidden behind it. A clear is the release.
+  const { display, calls } = displayFor();
+
+  await display.push(frame(['1']));
+  await display.push({ kind: 'away' });
+  await display.push({ kind: 'away' });
+
+  assert.deepEqual(calls, ['clear', 'draw', 'clear'], calls.join(','));
+});
+
+test('joining a call again takes the screen back', async () => {
+  const { display, calls } = displayFor();
+
+  await display.push({ kind: 'away' });
+  await display.push(frame(['1']));
+
+  assert.deepEqual(calls, ['clear', 'draw'], 'nothing left to wipe before the draw');
+});
+
 test('a reconnect wipes again, having lost track while the Bar was away', async () => {
   const { display, calls } = displayFor();
 

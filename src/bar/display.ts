@@ -149,6 +149,19 @@ export class BarDisplay {
   }
 
   private async draw(frame: Frame): Promise<void> {
+    // Out of a call the screen is released, not painted: a clear is the DELETE
+    // the window manager reads as "nothing to show", so whatever else is
+    // running gets the screen. Once is enough — an unchanged frame never
+    // reaches here twice.
+    if (frame.kind === 'away') {
+      if (this.lastIds === null || this.lastIds.length > 0) {
+        await this.bar.DisplayClear({ application_name: APP_NAME });
+      }
+      this.lastIds = [];
+
+      return;
+    }
+
     const elements = frontElements(frame);
     const ids = elements.map((element) => element.id);
 

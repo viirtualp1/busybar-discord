@@ -18,21 +18,15 @@ export type AnyElement = TextElement | RectangleElement | ImageElement;
  * The front strip is the whole app. The back panel is deliberately left alone:
  * it doubled what every frame cost the device for a surface nobody looks at
  * unless the Bar is turned round, and the Bar could not keep up.
+ *
+ * Out of a call there is nothing to draw at all. A "no call" card would still
+ * be a frame, and under the window manager any frame is a claim on the screen —
+ * enough to keep music or a match hidden behind a message that says nothing is
+ * happening. The display hands the screen back instead.
  */
 export function frontElements(frame: Frame): AnyElement[] {
   if (frame.kind === 'away') {
-    return [
-      text({
-        id: 'away',
-        display: 'front',
-        align: 'center',
-        x: Math.round(FRONT.width / 2),
-        y: Math.round(FRONT.height / 2),
-        text: 'no call',
-        font: 'small',
-        color: TEXT.waiting,
-      }),
-    ];
+    return [];
   }
 
   const row = layoutRow(frame.tiles.length, FRONT_ROW);
